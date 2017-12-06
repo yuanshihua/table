@@ -3,42 +3,91 @@
 <head>
 <meta charset="UTF-8" />
 <title>table</title>
-<script type="text/javascript"
-	src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+<script th:src="ajaxfileupload.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("#button").click(function() {
+			if ($("#file").val().length > 0) {
+				fileupload();
+			} else {
+				alert("请选择图片");
+			}
+		});
+	});
+	function fileupload() {
+		$.ajaxFileUpload({
+			url : 'upload', //用于文件上传的服务器端请求地址
+			secureuri : false, //是否需要安全协议，一般设置为false
+			fileElementId : 'file', //文件上传域的ID
+			dataType : 'json', //返回值类型 一般设置为json
+			success : function(data, status) //服务器成功响应处理函数
+			{
+				console.info(data);
+				alert(data);
+				$("#img").attr("src", data);
+				if (typeof (data.error) != 'undefined') {
+					if (data.error != '') {
+						alert(data.error);
+					} else {
+						alert(data.msg);
+					}
+				}
+			},
+			error : function(data, status, e)//服务器响应失败处理函数
+			{
+				alert(e);
+			}
+		});
+	}
+</script>
 </head>
 <body>
-	<form action="msg" method="post" th:object="${person}">
+	<form action="msg" method="post" th:object="${person}"
+		enctype="multipart/form-data">
 		<table>
 			<tr>
 				<td>当前时间为：</td>
-				<td th:text="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd hh:mm:ss')}"></td>
+				<td
+					th:text="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd hh:mm:ss')}"></td>
 			</tr>
 			<tr>
 				<td>ID</td>
-				<td><input type="text"  th:value="${person.id == 0}?'':${person.id}" th:field="*{id}"/> </td>
+				<td><input type="text"
+					th:value="${person.id == 0}?'':${person.id}" th:field="*{id}" /></td>
 			</tr>
 			<tr>
 				<td>姓名</td>
-				<td><input type="text" th:value="${person.name}" th:field="*{name}" /> </td>
+				<td><input type="text" th:value="${person.name}"
+					th:field="*{name}" /></td>
 			</tr>
 			<tr>
 				<td>年龄</td>
-				<td><input type="text" th:value="${person.age==0}?'':${person.age}" th:field="*{age}" /> </td>
+				<td><input type="text" th:value="${person.age==0}?'':${person.age}" th:field="*{age}" /></td>
 			</tr>
 			<tr>
 				<td>性别</td>
-				<td>男<input type="radio" th:value="男" th:field="*{sex}" checked="checked"/></td>
-				<td>女<input type="radio" th:value="女" th:field="*{sex}" /> <br /></td>
+				<td>男<input type="radio" th:value="男" th:field="*{sex}" checked="checked" />
+					女<input type="radio" th:value="女" th:field="*{sex}"/></td>
 			</tr>
 			<tr>
-				<td>地址 </td>
-				<td><input type="text" th:value="${person.location}" th:field="*{location}" /> </td>
+				<td>地址</td>
+				<td><input type="text" th:value="${person.location}"
+					th:field="*{location}" /></td>
 			</tr>
 			<tr>
-				<td><input type="submit" th:value="提交" /> </td>
+				<td>文件上传</td>
+				<td><input type="file" name="file" id="file" /></td>
+				<td><input type="button" value="上传" id="button" /></td>
+			</tr>
+			<tr>
+				<td><img id="img" alt="" src="" /></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><input type="submit" th:value="提交" /></td>
 			</tr>
 		</table>
 	</form>
-	<div th:include="footer::copy"></div>
+	<div ><p th:text="#{welcome}"></p></div>
 </body>
 </html>
