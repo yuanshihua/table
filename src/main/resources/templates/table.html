@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>table</title>
+<script type="text/javascript"
+	src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+</head>
+<body>
+	<form action="msg" method="post" th:object="${person}">
+		<table>
+			<tr>
+				<td>当前时间为：</td>
+				<td th:text="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd hh:mm:ss')}"></td>
+			</tr>
+			<tr>
+				<td>ID</td>
+				<td><input type="text"  th:value="${person.id == 0}?'':${person.id}" th:field="*{id}"/> </td>
+			</tr>
+			<tr>
+				<td>姓名</td>
+				<td><input type="text" th:value="${person.name}" th:field="*{name}" /> </td>
+			</tr>
+			<tr>
+				<td>年龄</td>
+				<td><input type="text" th:value="${person.age==0}?'':${person.age}" th:field="*{age}" /> </td>
+			</tr>
+			<tr>
+				<td>性别</td>
+				<td>男<input type="radio" th:value="男" th:field="*{sex}" checked="checked"/></td>
+				<td>女<input type="radio" th:value="女" th:field="*{sex}" /> <br /></td>
+			</tr>
+			<tr>
+				<td>地址 </td>
+				<td><input type="text" th:value="${person.location}" th:field="*{location}" /> </td>
+			</tr>
+			<tr>
+				<td><input type="submit" th:value="提交" /> </td>
+			</tr>
+		</table>
+	</form>
+	<div th:include="footer::copy"></div>
+</body>
+</html>

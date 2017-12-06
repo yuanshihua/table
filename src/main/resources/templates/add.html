@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>table</title>
+<script type="text/javascript"
+	src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+<script type="text/javascript">
+	function add() {
+		location.href = "table";
+	}
+</script>
+</head>
+<body>
+	<input type="button" value="新增" th:onclick="'add()'" />
+	<table border="1">
+		<tr>
+			<th>ID</th>
+			<th>姓名</th>
+			<th>年龄</th>
+			<th>性别</th>
+			<th>住址</th>
+		</tr>
+		<tr th:each="person:${persons}">
+			<td th:text="${person.id}"></td>
+			<td th:text="${person.name}"></td>
+			<td th:text="${person.age}"></td>
+			<td th:text="${person.sex}"></td>
+			<td th:text="${person.location}"></td>
+			<td><a th:href="@{table(id=${person.id})}">编辑</a></td>
+		</tr>
+	</table>
+	<div th:include="footer::copy"></div>
+</body>
+</html>
